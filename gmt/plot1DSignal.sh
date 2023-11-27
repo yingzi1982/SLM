@@ -37,6 +37,8 @@ xmin=`echo $xrange | awk '{print $1}'`
 xmax=`echo $xrange | awk '{print $2}'`
 ymin=`echo $yrange | awk '{print $1}'`
 ymax=`echo $yrange | awk '{print $2}'`
+xtickSub=`echo "(($xtick)/2)" | bc -l`
+ytickSub=`echo "(($ytick)/2)" | bc -l`
 
 region=$xmin/$xmax/$ymin/$ymax
 
@@ -45,7 +47,7 @@ echo $region
 
 gmt begin $fig
 
-awk '{print $1 $2}' $originalxy | gmt plot -J$projection -R$region -Bxa$xtick+l"$xlabel ($xunit)" -Bya$ytick+l"$ylabel ($yunit)" -G$fillColor #-Wthin,$lineColor
+awk '{print $1 $2}' $originalxy | gmt plot -J$projection -R$region -Bxa$xtick\f$xtickSub+l"$xlabel ($xunit)" -Bya$ytick\f$ytickSub+l"$ylabel ($yunit)" -G$fillColor #-Wthin,$lineColor
 
 gmt end
 
