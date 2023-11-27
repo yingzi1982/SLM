@@ -8,17 +8,17 @@ gmt set FONT 12p,Helvetica,black
 #--------------------------------------------------------------------
 
 name=${1}
-resampleRate=${2}
 
-xlabel=${3}
-xunit=${4}
-xrange=${5}
-xtick=${6}
+xlabel=${2}
+xunit=${3}
+#xrange=${4}
 
-ylabel=${7}
-yunit=${8}
-yrange=${9}
-ytick=${10}
+ylabel=${4}
+yunit=${5}
+#yrange=${7}
+
+lineColor=blue
+fillColor=lightgray
 
 backupFolder=../backup/
 figFolder=../figures/
@@ -27,20 +27,16 @@ fig=$figFolder$name
 
 originalxy=$backupFolder$name
 
-xmin=`echo $xrange | awk '{print $1}'`
-xmax=`echo $xrange | awk '{print $2}'`
-ymin=`echo $yrange | awk '{print $1}'`
-ymax=`echo $yrange | awk '{print $2}'`
-
-region=$xmin/$xmax/$ymin/$ymax
-
 width=2.2
 height=0.68
 projection=X$width\i/$height\i
 
+#echo $xmin $xmax $ymin $ymax
+#echo -R$xmin/$xmax/$ymin/$ymax
 gmt begin $fig
 
-awk -v resampleRate="$resampleRate" 'NR%resampleRate==0 {print $1 $2}' $originalxy | gmt plot -J$projection -R$region -Bx$xtick+l"$xlabel ($xunit)" -By$ytick+l"$ylabel ($yunit)" -Gred -Wthin,black
+#awk '{print $1 $2}' $originalxy | gmt plot -J$projection -Ra -Bxaf+l"$xlabel ($xunit)" -Byaf+l"$ylabel ($yunit)" -G$fillColor -Wthin,$lineColor
+awk '{print $1 $2}' $originalxy | gmt plot -R0/10/-2/2 -J$projection -Glightgray -Wthin,$lineColor -Ba
 
 gmt end
 
