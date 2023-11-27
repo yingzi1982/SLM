@@ -20,21 +20,6 @@ xlabel=${8}
 yrange=${9}
 yInterval=${10}
 ylabel=${11}
-#echo $name 
-#echo $width
-#echo $height
-#echo $line
-#echo $fill
-#echo $xrange
-#echo aaaa
-#echo $xInterval
-#echo $xlabel
-#exit
-#
-#width=2.2i
-#height=0.78i
-#line=thinnest,black
-#fill=lightgray
 
 backupFolder=../backup/
 figFolder=../figures/
@@ -49,15 +34,12 @@ xmin=`echo $xrange | awk '{print $1}'`
 xmax=`echo $xrange | awk '{print $2}'`
 ymin=`echo $yrange | awk '{print $1}'`
 ymax=`echo $yrange | awk '{print $2}'`
-divisor=2
-xSubInterval=`echo "(($xInterval)/$divisor)" | bc -l`
-ySubInterval=`echo "(($yInterval)/$divisor)" | bc -l`
 
 region=$xmin/$xmax/$ymin/$ymax
 
 gmt begin $fig
 
-gmt plot $originalxy -J$projection -R$region -Bxa$xInterval\f$xSubInterval+l"$xlabel" -Bya$yInterval\f$ySubInterval+l"$ylabel" -G$fill -W$line
+gmt plot $originalxy -J$projection -R$region -Bxa$xInterval+l"$xlabel" -Bya$yInterval+l"$ylabel" -G$fill -W$line
 
 gmt end
 
