@@ -38,7 +38,7 @@ dt = 1/fs;
 t = [0:dt:(totalSamples-1)*dt]';
 s = [t s];
 
-np = 1000;
+np = 2000;
 e = trace2envelope(s,np);
 dlmwrite('../backup/soundPressureEnvelope',e,' ');
 
