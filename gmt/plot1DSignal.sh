@@ -12,10 +12,12 @@ name=${1}
 xlabel=${2}
 xunit=${3}
 #xrange=${4}
+#xtick=
 
 ylabel=${4}
 yunit=${5}
 #yrange=${7}
+ytick=
 
 lineColor=blue
 fillColor=lightgray
@@ -36,7 +38,7 @@ projection=X$width\i/$height\i
 gmt begin $fig
 
 #awk '{print $1 $2}' $originalxy | gmt plot -J$projection -Ra -Bxaf+l"$xlabel ($xunit)" -Byaf+l"$ylabel ($yunit)" -G$fillColor -Wthin,$lineColor
-awk '{print $1 $2}' $originalxy | gmt plot -R0/10/-2/2 -J$projection -Glightgray -Wthin,$lineColor -Ba
+awk '{print $1 $2}' $originalxy | gmt plot -R0/10/-2/2 -J$projection -Wthin,red -Ba
 
 gmt end
 
