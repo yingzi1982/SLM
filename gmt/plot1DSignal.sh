@@ -37,8 +37,9 @@ xmin=`echo $xrange | awk '{print $1}'`
 xmax=`echo $xrange | awk '{print $2}'`
 ymin=`echo $yrange | awk '{print $1}'`
 ymax=`echo $yrange | awk '{print $2}'`
-xtickSub=`echo "(($xtick)/2)" | bc -l`
-ytickSub=`echo "(($ytick)/2)" | bc -l`
+sub=2
+xtickSub=`echo "(($xtick)/$sub)" | bc -l`
+ytickSub=`echo "(($ytick)/$sub)" | bc -l`
 
 region=$xmin/$xmax/$ymin/$ymax
 
