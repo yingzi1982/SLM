@@ -9,18 +9,17 @@ gmt set FONT 12p,Helvetica,black
 
 name=${1}
 
-xlabel=${2}
-xunit=${3}
-xrange=${4}
+xrange=${2}
+xtick=${3}
+xlabel=${4}
+xunit=${5}
 
-ylabel=${6}
-yunit=${7}
-yrange=${8}
+yrange=${6}
+ytick=${7}
+ylabel=${8}
+yunit=${9}
 
-#xtick=${5}
-#ytick=${9}
-
-lineColor=blue
+lineColor=black
 fillColor=lightgray
 
 backupFolder=../backup/
@@ -43,8 +42,7 @@ region=$xmin/$xmax/$ymin/$ymax
 
 gmt begin $fig
 
-#awk '{print $1 $2}' $originalxy | gmt plot -J$projection -Ra -Bxaf+l"$xlabel ($xunit)" -Byaf+l"$ylabel ($yunit)" -G$fillColor -Wthin,$lineColor
-awk '{print $1 $2}' $originalxy | gmt plot -R0/10/-2/2 -J$projection -Ba1 -Wthin,red
+awk '{print $1 $2}' $originalxy | gmt plot -J$projection -R$region -Bx$xtick+l"$xlabel ($xunit)" -By$ytick+l"$ylabel ($yunit)" -G$fillColor -Wthin,$lineColor
 
 gmt end
 
