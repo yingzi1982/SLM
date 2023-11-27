@@ -28,7 +28,7 @@ fig=$figFolder$name
 originalxy=$backupFolder$name
 
 width=2.2
-height=0.68
+height=0.78
 projection=X$width\i/$height\i
 
 xmin=`echo $xrange | awk '{print $1}'`
