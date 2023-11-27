@@ -8,7 +8,7 @@ gmt set FONT 12p,Helvetica,black
 #--------------------------------------------------------------------
 
 name=${1}
-resample_rate=${2}
+resampleRate=${2}
 
 xlabel=${3}
 xunit=${4}
@@ -40,7 +40,7 @@ projection=X$width\i/$height\i
 
 gmt begin $fig
 
-awk -v resample_rate="$resample_rate" 'NR%resample_rate==0 {print $1 $2}' $originalxy | gmt plot -J$projection -R$region -Bx$xtick+l"$xlabel ($xunit)" -By$ytick+l"$ylabel ($yunit)" -Gred -Wthin,black
+awk -v resampleRate="$resampleRate" 'NR%resampleRate==0 {print $1 $2}' $originalxy | gmt plot -J$projection -R$region -Bx$xtick+l"$xlabel ($xunit)" -By$ytick+l"$ylabel ($yunit)" -Gred -Wthin,black
 
 gmt end
 

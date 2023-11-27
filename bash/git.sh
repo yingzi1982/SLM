@@ -3,7 +3,7 @@
 operation=$1
 
 
-folder="../bash/*sh ../gmt/*sh ../octave/*m" 
+folder="../README.md ../bash/*sh ../gmt/*sh ../octave/*m" 
 #folder="../README.md"
 
 #folder=$2

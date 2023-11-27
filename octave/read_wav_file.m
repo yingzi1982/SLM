@@ -1,5 +1,5 @@
 #!/usr/bin/env octave
-pkg load signal
+%pkg load signal
 
 clear all
 close all
@@ -33,15 +33,13 @@ fprintf('-----------------------\n')
 totalSamples = audioInfo.TotalSamples;
 [s, fs] = audioread(wavFile);
 s = s* fullScalePa;
-%rms(s)
-%max(abs(s))
+
 dt = 1/fs;
 t = [0:dt:(totalSamples-1)*dt]';
 s = [t s];
 
 np = 1000;
 e = trace2envelope(s,np);
-whos e
 dlmwrite('../backup/soundPressureEnvelope',e,' ');
 
 %tClip = [0 0.1];
@@ -49,4 +47,4 @@ dlmwrite('../backup/soundPressureEnvelope',e,' ');
 %sClip = s([tClipIndex(1):tClipIndex(2)],:);
 %whos sClip
 
-pkg unload signal
+%pkg unload signal

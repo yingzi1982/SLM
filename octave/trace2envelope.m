@@ -2,21 +2,19 @@ function [env] = trace2envelope(signal,np)
 pkg load signal
 
 t = signal(:,1);
-%t = t-t(1);
-
 s = signal(:,2:end);
 
 envPositive = abs(hilbert(s));
-envNegative = abs(hilbert(-s));
-env = [envPositive;flipud(-envNegative)];
+envNegative = -abs(hilbert(-s));
 
-%env = env/max(abs(env(:)));
+envPositiveResample = resample(envPositive,np,length(envPositive));
+envNegativeResample = resample(envNegative,np,length(envNegative));
+envResample = [envPositiveResample;flipud(envNegativeResample)];
 
-t = [t;flipud(t)];
-env =[t env];
+tResample = resample(t,np,length(t));
+tResample = [tResample;flipud(tResample)];
 
-resampleRate = floor(rows(s)/np);
-env = env(1:resampleRate:end,:);
+env =[tResample envResample];
 
 pkg unload signal
 end
