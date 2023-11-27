@@ -19,6 +19,8 @@ ylabel=${7}
 
 line=thinnest,black
 fill=lightgray
+width=2.2i
+height=0.78i
 
 backupFolder=../backup/
 figFolder=../figures/
@@ -27,9 +29,7 @@ fig=$figFolder$name
 
 originalxy=$backupFolder$name
 
-width=2.2
-height=0.78
-projection=X$width\i/$height\i
+projection=X$width/$height
 
 xmin=`echo $xrange | awk '{print $1}'`
 xmax=`echo $xrange | awk '{print $2}'`
