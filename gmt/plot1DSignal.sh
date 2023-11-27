@@ -45,8 +45,9 @@ echo $region
 
 gmt begin $fig
 
-awk '{print $1 $2}' $originalxy | gmt plot -J$projection -R$region -Bx$xtick+l"$xlabel ($xunit)" -By$ytick+l"$ylabel ($yunit)" -G$fillColor #-Wthin,$lineColor
+#awk '{print $1 $2}' $originalxy | gmt plot -J$projection -R$region -Bx$xtick+l"$xlabel ($xunit)" -By$ytick+l"$ylabel ($yunit)" -G$fillColor #-Wthin,$lineColor
 
+awk '{print $1 $2}' $originalxy | gmt plot -J$projection -R$region -Bxa+l"$xlabel ($xunit)" -Bya+l"$ylabel ($yunit)" -G$fillColor #-Wthin,$lineColor
 gmt end
 
 rm -f gmt.conf
