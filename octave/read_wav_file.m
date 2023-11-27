@@ -43,11 +43,11 @@ e = trace2envelope(s,np);
 dlmwrite('../backup/soundPressureEnvelope',e,' ');
 
 np = 2000;
-PSD = trace2spectrum(s);
-f = PSD(:,1);
-PSD = PSD(:,2:end);
+S = trace2spectrum(s);
+f = S(:,1);
+S = S(:,2:end);
 
-spl = [f PSD-20*log10(soundPressureRef)];
+spl = [f 20*log10(S/soundPressureRef)];
 %max(spl(:,2))
 %min(spl(:,2))
 dlmwrite('../backup/soundPressureLevel',spl,' ');
