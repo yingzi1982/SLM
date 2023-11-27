@@ -38,7 +38,7 @@ projection=X$width\i/$height\i
 gmt begin $fig
 
 #awk '{print $1 $2}' $originalxy | gmt plot -J$projection -Ra -Bxaf+l"$xlabel ($xunit)" -Byaf+l"$ylabel ($yunit)" -G$fillColor -Wthin,$lineColor
-awk '{print $1 $2}' $originalxy | gmt plot -R0/10/-2/2 -J$projection -Wthin,red -Ba
+awk '{print $1 $2}' $originalxy | gmt plot -R0/10/-2/2 -J$projection -Ba -Wthin,red
 
 gmt end
 
