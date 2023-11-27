@@ -11,13 +11,14 @@ name=${1}
 
 xlabel=${2}
 xunit=${3}
-#xrange=${4}
-#xtick=
+xrange=${4}
 
-ylabel=${4}
-yunit=${5}
-#yrange=${7}
-ytick=
+ylabel=${6}
+yunit=${7}
+yrange=${8}
+
+#xtick=${5}
+#ytick=${9}
 
 lineColor=blue
 fillColor=lightgray
@@ -33,12 +34,17 @@ width=2.2
 height=0.68
 projection=X$width\i/$height\i
 
-#echo $xmin $xmax $ymin $ymax
-#echo -R$xmin/$xmax/$ymin/$ymax
+xmin=`echo $xrange | awk '{print $1}'`
+xmax=`echo $xrange | awk '{print $2}'`
+ymin=`echo $yrange | awk '{print $1}'`
+ymax=`echo $yrange | awk '{print $2}'`
+
+region=$xmin/$xmax/$ymin/$ymax
+
 gmt begin $fig
 
 #awk '{print $1 $2}' $originalxy | gmt plot -J$projection -Ra -Bxaf+l"$xlabel ($xunit)" -Byaf+l"$ylabel ($yunit)" -G$fillColor -Wthin,$lineColor
-awk '{print $1 $2}' $originalxy | gmt plot -R0/10/-2/2 -J$projection -Ba -Wthin,red
+awk '{print $1 $2}' $originalxy | gmt plot -R0/10/-2/2 -J$projection -Ba1 -Wthin,red
 
 gmt end
 
