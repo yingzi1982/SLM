@@ -43,7 +43,7 @@ region=$xmin/$xmax/$ymin/$ymax
 
 gmt begin $fig
 
-gmt plot $originalxy -J$projection -R$region -Bxa$xtick\f$xtickSub+l"$xlabel" -Bya$ytick\f$ytickSub+l"$ylabel" -G$fillColor #-Wthin,$lineColor
+gmt plot $originalxy -J$projection -R$region -Bxa$xtick\f$xtickSub+l"$xlabel" -Bya$ytick\f$ytickSub+l"$ylabel" -G$fillColor -Wthin,$lineColor
 
 gmt end
 
