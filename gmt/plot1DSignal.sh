@@ -40,6 +40,9 @@ ymax=`echo $yrange | awk '{print $2}'`
 
 region=$xmin/$xmax/$ymin/$ymax
 
+echo $projection
+echo $region
+
 gmt begin $fig
 
 awk '{print $1 $2}' $originalxy | gmt plot -J$projection -R$region -Bx$xtick+l"$xlabel ($xunit)" -By$ytick+l"$ylabel ($yunit)" -G$fillColor -Wthin,$lineColor
