@@ -13,4 +13,4 @@ wavFolder=../data/$folderName/$testName\_$dateLabel\_SLM_$sessionNumberFmt\/Posi
 
 ./octave.sh ./read_wav_file.m $wavFolder
 
-./gmt.sh
+#./gmt.sh

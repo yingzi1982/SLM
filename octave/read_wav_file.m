@@ -42,6 +42,16 @@ np = 2000;
 e = trace2envelope(s,np);
 dlmwrite('../backup/soundPressureEnvelope',e,' ');
 
+np = 2000;
+S = trace2spectrum(s);
+f = S(:,1);
+S = S(:,2:end);
+
+spl = [f 20*log10(abs(S)/soundPressureRef)];
+max(spl(:,2))
+min(spl(:,2))
+dlmwrite('../backup/soundPressureLevel',spl,' ');
+
 %tClip = [0 0.1];
 %[tClip tClipIndex]=findNearest(t,tClip);
 %sClip = s([tClipIndex(1):tClipIndex(2)],:);
