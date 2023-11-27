@@ -1,10 +1,10 @@
 #!/bin/bash
 
-folderName=calibrator
+folderName=office
 testName=MyTest1
-dateLabel=2023-11-23
+dateLabel=2023-11-24
 sessionNumber=1
-positionNumber=1
+positionNumber=3
 
 sessionNumberFmt=`printf "%03d" $sessionNumber`
 positionNumberFmt=`printf "%02d" $positionNumber`
