@@ -17,8 +17,8 @@ yrange=${5}
 ytick=${6}
 ylabel=${7}
 
-lineColor=black
-fillColor=lightgray
+line=thinnest,black
+fill=lightgray
 
 backupFolder=../backup/
 figFolder=../figures/
@@ -43,7 +43,7 @@ region=$xmin/$xmax/$ymin/$ymax
 
 gmt begin $fig
 
-gmt plot $originalxy -J$projection -R$region -Bxa$xtick\f$xtickSub+l"$xlabel" -Bya$ytick\f$ytickSub+l"$ylabel" -G$fillColor -W
+gmt plot $originalxy -J$projection -R$region -Bxa$xtick\f$xtickSub+l"$xlabel" -Bya$ytick\f$ytickSub+l"$ylabel" -G$fill -W$line
 
 gmt end
 
