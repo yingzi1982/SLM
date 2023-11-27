@@ -4,17 +4,12 @@ pkg load signal
 t = signal(:,1);
 s = signal(:,2:end);
 
-envPositive = abs(hilbert(s));
-envNegative = -abs(hilbert(-s));
-
-envPositiveResample = resample(envPositive,np,length(envPositive));
-envNegativeResample = resample(envNegative,np,length(envNegative));
-envResample = [envPositiveResample;flipud(envNegativeResample)];
-
-tResample = resample(t,np,length(t));
-tResample = [tResample;flipud(tResample)];
-
-env =[tResample envResample];
+envPositive = [t abs(hilbert(s))];
+%envPositive([1,end],:) = [];
+envNegative = [t -abs(hilbert(-s))];
+%envNegative([1,end],:) = [];
+env = [envPositive;flipud(envNegative)];
+env = resample(env,np,length(env));
 
 pkg unload signal
 end
