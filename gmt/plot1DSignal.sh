@@ -37,7 +37,7 @@ xmin=`echo $xrange | awk '{print $1}'`
 xmax=`echo $xrange | awk '{print $2}'`
 ymin=`echo $yrange | awk '{print $1}'`
 ymax=`echo $yrange | awk '{print $2}'`
-sub=2
+sub=5
 xtickSub=`echo "(($xtick)/$sub)" | bc -l`
 ytickSub=`echo "(($ytick)/$sub)" | bc -l`
 
