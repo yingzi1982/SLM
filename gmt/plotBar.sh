@@ -37,8 +37,7 @@ region=$xmin/$xmax/$ymin/$ymax
 
 gmt begin $fig
 
-awk 'NR>=2{print $1, $3}' $originalxy | gmt plot -J$projection -Bx+l"$xlabel" -By+l"$ylabel" -BWSne+glightblue -R$region -Sb1ub0 
-
+awk 'NR>=2{print $1, $3}' $originalxy | gmt plot -J$projection -Bx+l"$xlabel" -By+l"$ylabel" -BWSne+ggray -Gred -R$region -Sb1ub0 
 gmt end
 
 rm -f gmt.conf
