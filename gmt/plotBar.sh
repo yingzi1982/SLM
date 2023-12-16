@@ -34,7 +34,7 @@ ymin=`echo $yrange | awk '{print $1}'`
 ymax=`echo $yrange | awk '{print $2}'`
 
 region=$xmin/$xmax/$ymin/$ymax
- 
+
 gmt begin $fig
 
 awk '{print $1, $3}' $originalxy | gmt histogram -Bx+l"$xlabel" -By+l"$ylabel" -BWSne+glightblue -R$region -Gorange -W1p -T1 
