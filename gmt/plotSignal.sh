@@ -39,7 +39,7 @@ region=$xmin/$xmax/$ymin/$ymax
 
 gmt begin $fig
 
-gmt plot $originalxy -J$projection -R$region -Bsxcxannots.txt+l"$xlabel" -Bya$yInterval+l"$ylabel" $fill $line
+gmt plot $originalxy -J$projection -R$region -Bxa$xInterval+l"$xlabel" -Bya$yInterval+l"$ylabel" $fill $line
 
 gmt end
 
