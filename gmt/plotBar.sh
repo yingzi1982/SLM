@@ -10,16 +10,14 @@ name=${1}
 
 width=${2}
 height=${3}
-fillColor1=${4}
-fillColor2=${5}
 
-xrange=${6}
-xInterval=${7}
-xlabel=${8}
+xrange=${4}
+xInterval=${5}
+xlabel=${6}
 
-yrange=${9}
-yInterval=${10}
-ylabel=${11}
+yrange=${7}
+yInterval=${8}
+ylabel=${9}
 
 backupFolder=../backup/
 figFolder=../figures/
@@ -39,7 +37,7 @@ region=$xmin/$xmax/$ymin/$ymax
  
 gmt begin $fig
 
-awk '{print $1, $3}' $originalxy | gmt histogram -Bx+l"$xlabel" -By+l"$ylabel" -BWSne+glightblue -R$region -Gorange -W1p -Z1 -T1 
+awk '{print $1, $3}' $originalxy | gmt histogram -Bx+l"$xlabel" -By+l"$ylabel" -BWSne+glightblue -R$region -Gorange -W1p -T1 
 
 gmt end
 
