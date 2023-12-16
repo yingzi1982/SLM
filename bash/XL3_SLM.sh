@@ -11,6 +11,8 @@ positionNumberFmt=`printf "%02d" $positionNumber`
 
 wavFolder=../data/$folderName/$testName\_$dateLabel\_SLM_$sessionNumberFmt\/Position_#$positionNumberFmt
 
-./octave.sh ./read_wav_file.m $wavFolder
+./read_LA.sh $wavFolder
+
+./read_wav_file.sh $wavFolder
 
 #./gmt.sh
