@@ -36,7 +36,7 @@ ymax=`echo $yrange | awk '{print $2}'`
 region=$xmin/$xmax/$ymin/$ymax
 
 yHalfInterval=`echo $yInterval/2 | bc -l`
-LAFmin=`awk 'NR==1{print $3}' $originalxy`
+#LAFmin=`awk 'NR==1{print $3}' $originalxy`
 LAF90=`awk 'NR==2{print $3}' $originalxy`
 LAFmax=`awk 'NR==3{print $3}' $originalxy`
 
