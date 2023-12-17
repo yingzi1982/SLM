@@ -3,11 +3,11 @@
 cd ../gmt/
 
 if true; then
-  ./plotSignal.sh soundPressureEnvelope 2.2i 0.8i -Wthinnest,red -Glightgray "0 60" 20 "Time (s)" "-1 1" 1 "Signal (Pa)"
+  ./plotSignal.sh soundPressureEnvelope 2.2i 0.8i -W.5p,red -Glightgray "0 60" 20 "Time (s)" "-1 1" 1 "Signal (Pa)"
 fi
 
 if false; then
-  ./plotSignal.sh soundPressureLevel 2.2i 0.8i -Wthinnest,black " " "900 1100" 50 "Freq (Hz)" "-100 60" 20 "PSD (Pa/Hz)"
+  ./plotSignal.sh soundPressureLevel 2.2i 0.8i -W.5p,black " " "900 1100" 50 "Freq (Hz)" "-100 60" 20 "PSD (Pa/Hz)"
 fi
 
 if true; then
