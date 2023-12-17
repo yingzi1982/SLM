@@ -37,14 +37,14 @@ region=$xmin/$xmax/$ymin/$ymax
 
 yHalfInterval=`echo $yInterval/2 | bc -l`
 #LAFmin=`awk 'NR==1{print $3}' $originalxy`
-LA90=`awk 'NR==2{print $3}' $originalxy`
-LAmax=`awk 'NR==3{print $3}' $originalxy`
+LAF90=`awk 'NR==2{print $3}' $originalxy`
+LAFmax=`awk 'NR==3{print $3}' $originalxy`
 
 cat << EOF >| LAF90.txt
-0 $LAF90 LM L@-AF90@-
+0 $LAF90 LM L@-A90@-
 EOF
 cat << EOF >| LAFmax.txt
-0 $LAFmax LM L@-AFmax@-
+0 $LAFmax LM L@-Amax@-
 EOF
 
 gmt begin $fig
