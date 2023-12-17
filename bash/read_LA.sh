@@ -17,7 +17,9 @@ echo LAF90 = $LAF90
 
 LA_file=../backup/LA
 
-echo -1 fullband $LAF90 >  $LA_file 
+echo -3 fullband $LAFmin >   $LA_file 
+echo -2 fullband $LAF90 >>  $LA_file 
+echo -1 fullband $LAFmax >>  $LA_file 
 
 LAeq_fullband=`awk 'NR==21{print $13}' $Report_file`
 echo 0 fullband $LAeq_fullband >> $LA_file 

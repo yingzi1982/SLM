@@ -36,12 +36,14 @@ ymax=`echo $yrange | awk '{print $2}'`
 region=$xmin/$xmax/$ymin/$ymax
 
 yHalfInterval=`echo $yInterval/2 | bc -l`
-LAF90=`awk 'NR==1{print $3}' $originalxy`
+LAFmin=`awk 'NR==1{print $3}' $originalxy`
+LAF90=`awk 'NR==2{print $3}' $originalxy`
+LAFmax=`awk 'NR==3{print $3}' $originalxy`
 
 gmt begin $fig
 
-awk 'NR==2{print $1, $3}' $originalxy | gmt plot -J$projection -Bxcxannots.txt+a-45+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" -BWSne+glightgray -R$region -Sb1ub0 -Gyellow -W.5p
-awk 'NR>=3{print $1, $3}' $originalxy | gmt plot -Sb1ub0 -Gorange -W.5p
+awk 'NR==4{print $1, $3}' $originalxy | gmt plot -J$projection -Bxcxannots.txt+a-45+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" -BWSne+glightgray -R$region -Sb1ub0 -Gyellow -W.5p
+awk 'NR>=5{print $1, $3}' $originalxy | gmt plot -Sb1ub0 -Gorange -W.5p
 
 echo 0 $LAF90 | gmt plot  -Ss0.02i -Gred -N -W0p
 
