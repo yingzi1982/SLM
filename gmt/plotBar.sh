@@ -39,7 +39,7 @@ yHalfInterval=`echo $yInterval/2 | bc -l`
 
 gmt begin $fig
 
-awk 'NR==1{print $1, $3}' $originalxy | gmt plot -J$projection -Bxcxannots.txt+a-45+l"$xlabel" -By$yInterval\fg$yHalfInterval+l"$ylabel" -BWSne+ggray -R$region -Sb1ub0 -Gred -W.5p
+awk 'NR==1{print $1, $3}' $originalxy | gmt plot -J$projection -Bxcxannots.txt+a-45+l"$xlabel" -Bya$yInterval\fg$yHalfInterval+l"$ylabel" -BWSne+ggray -R$region -Sb1ub0 -Gred -W.5p
 awk 'NR>=2{print $1, $3}' $originalxy | gmt plot -Sb1ub0 -Gorange -W.5p
 
 gmt end
