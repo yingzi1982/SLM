@@ -65,3 +65,4 @@ gmt end
 
 rm -f gmt.conf
 rm -f gmt.history
+pdf2svg  $fig\.pdf $fig\.svg
