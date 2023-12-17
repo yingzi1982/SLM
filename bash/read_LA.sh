@@ -9,11 +9,11 @@ dos2unix -q $Report_file
 dos2unix -q $Spectrum_Report_file
 
 LAFmax=`awk 'NR==21{print $7}' $Report_file`
-#echo $LAFmax
+echo LAFmax = $LAFmax
 LAFmin=`awk 'NR==21{print $8}' $Report_file`
-#echo $LAFmin
+echo LAFmin = $LAFmin
 LAF90=`awk 'NR==21{print $59}' $Report_file`
-#echo $LAF90
+echo LAF90 = $LAF90
 
 LA_file=../backup/LA
 
