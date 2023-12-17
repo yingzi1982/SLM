@@ -40,8 +40,11 @@ LAFmin=`awk 'NR==1{print $3}' $originalxy`
 LAF90=`awk 'NR==2{print $3}' $originalxy`
 LAFmax=`awk 'NR==3{print $3}' $originalxy`
 
-cat << EOF >| yannots.txt
-$LAF90 ig LAF90
+cat << EOF >| LAF90.txt
+0 $LAF90 LM LAF90
+EOF
+cat << EOF >| LAFmax.txt
+0 $LAFmax LM LAFmax
 EOF
 
 gmt begin $fig
@@ -49,8 +52,10 @@ gmt begin $fig
 awk 'NR==4{print $1, $3}' $originalxy | gmt plot -J$projection -Bxcxannots.txt+a-45+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" -BWSne+glightgray -R$region -Sb1ub0 -Gyellow -W.5p
 awk 'NR>=5{print $1, $3}' $originalxy | gmt plot -Sb1ub0 -Gorange -W.5p
 
-echo 0 $LAFmax | gmt plot  -Ss0.02i -Gred -N -W0p
-echo 0 $LAF90 | gmt plot  -Ss0.02i -Ggreen -N -W0p
+#echo 0 $LAFmax | gmt plot  -Ss0.02i -Gred -N -W0p
+#echo 0 $LAF90 | gmt plot  -Ss0.02i -Ggreen -N -W0p
+gmt plot -Ss0.5c -Gred -Wthinnest LAF90.txt
+gmt text -Dj10p/0 -F+f12p,Courier-Bold,red+j -N LAF90.txt
 
 gmt end
 
