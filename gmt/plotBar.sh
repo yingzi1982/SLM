@@ -42,7 +42,7 @@ LAFmax=`awk 'NR==3{print $3}' $originalxy`
 
 gmt begin $fig
 
-awk 'NR==4{print $1, $3}' $originalxy | gmt plot -J$projection -Bxcxannots.txt+a-45+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" -BWSne+glightgray -R$region -Sb1ub0 -Gyellow -W.5p
+awk 'NR==4{print $1, $3}' $originalxy | gmt plot -J$projection -Bxcxannots.txt+a-45+l"$xlabel" -Bpya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" -BWSne+glightgray -R$region -Sb1ub0 -Gyellow -W.5p
 awk 'NR>=5{print $1, $3}' $originalxy | gmt plot -Sb1ub0 -Gorange -W.5p
 
 echo 0 $LAFmax | gmt plot  -Ss0.02i -Gred -N -W0p
