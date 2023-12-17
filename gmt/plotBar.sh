@@ -41,7 +41,7 @@ LAF90=`awk 'NR==2{print $3}' $originalxy`
 LAFmax=`awk 'NR==3{print $3}' $originalxy`
 
 cat << EOF >| LAF90.txt
-0 $LAF90 LM LAF90
+0 $LAF90 LM L@-AF90@-
 EOF
 cat << EOF >| LAFmax.txt
 0 $LAFmax LM LAFmax
