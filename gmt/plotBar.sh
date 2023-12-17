@@ -41,7 +41,7 @@ LAF90=`awk 'NR==2{print $3}' $originalxy`
 LAFmax=`awk 'NR==3{print $3}' $originalxy`
 
 cat << EOF >| yannots.txt
-$LAF90 ig
+$LAF90 ig LAF90
 EOF
 
 gmt begin $fig
