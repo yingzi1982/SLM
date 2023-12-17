@@ -3,7 +3,7 @@
 cd ../gmt/
 
 if true; then
-  ./plotSignal.sh soundPressureEnvelope 2.2i 0.8i -W.5p,black -Glightgray "0 60" 20 "Time (s)" "-1 1" 1 "Signal (Pa)"
+  ./plotSignal.sh soundPressureEnvelope 2.2i 0.8i -W.5p,black -Gorange "0 60" 20 "Time (s)" "-1 1" 1 "Signal (Pa)"
 fi
 
 if false; then
