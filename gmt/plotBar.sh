@@ -44,7 +44,7 @@ cat << EOF >| LAF90.txt
 0 $LAF90 LM L@-AF90@-
 EOF
 cat << EOF >| LAFmax.txt
-0 $LAFmax LM LAFmax
+0 $LAFmax LM L@-AFmax@-
 EOF
 
 gmt begin $fig
@@ -54,6 +54,10 @@ awk 'NR>=5{print $1, $3}' $originalxy | gmt plot -Sb1ub0 -Gorange -W.5p
 
 #echo 0 $LAFmax | gmt plot  -Ss0.02i -Gred -N -W0p
 #echo 0 $LAF90 | gmt plot  -Ss0.02i -Ggreen -N -W0p
+
+gmt plot -Ss0.03i -Gred -Wthinnest LAFmax.txt
+gmt text -Dj10p/0 -F+fred+j -N LAFmax.txt
+
 gmt plot -Ss0.03i -Gblue -Wthinnest LAF90.txt
 gmt text -Dj10p/0 -F+fblue+j -N LAF90.txt
 
