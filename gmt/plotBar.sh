@@ -54,7 +54,7 @@ awk 'NR>=5{print $1, $3}' $originalxy | gmt plot -Sb1ub0 -Gorange -W.5p
 
 #echo 0 $LAFmax | gmt plot  -Ss0.02i -Gred -N -W0p
 #echo 0 $LAF90 | gmt plot  -Ss0.02i -Ggreen -N -W0p
-gmt plot -Ss0.03i -Gred -Wthinnest LAF90.txt
+gmt plot -Ss0.03i -Gblue -Wthinnest LAF90.txt
 gmt text -Dj2p/0 -F+fblue+j -N LAF90.txt
 
 gmt end
