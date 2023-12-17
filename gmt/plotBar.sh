@@ -46,7 +46,6 @@ awk 'NR==4{print $1, $3}' $originalxy | gmt plot -J$projection -Bxcxannots.txt+a
 awk 'NR>=5{print $1, $3}' $originalxy | gmt plot -Sb1ub0 -Gorange -W.5p
 
 echo 0 $LAFmax | gmt plot  -Ss0.02i -Gred -N -W0p
-echo 0 $LAFmin | gmt plot  -Ss0.02i -Gblue -N -W0p
 echo 0 $LAF90 | gmt plot  -Ss0.02i -Ggreen -N -W0p
 
 gmt end
