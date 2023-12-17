@@ -42,7 +42,8 @@ gmt begin $fig
 
 awk 'NR==2{print $1, $3}' $originalxy | gmt plot -J$projection -Bxcxannots.txt+a-45+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" -BWSne+glightgray -R$region -Sb1ub0 -Gyellow -W.5p
 awk 'NR>=3{print $1, $3}' $originalxy | gmt plot -Sb1ub0 -Gorange -W.5p
-#echo $xmax $LAF90 | gmt plot -W1p,blue
+
+echo $xmax $LAF90 | gmt plot  -Sa0.05i -Gred -N -W1p,black 
 
 gmt end
 
