@@ -11,5 +11,5 @@ if false; then
 fi
 
 if true; then
-  ./plotBar.sh LA 2.8i 1.6i "-0.5 36.5" 1 "Freq (Hz)" "0 60" 10 "L@-A@- (dB)"
+  ./plotBar.sh LA 2.8i 1.6i "-0.5 36.5" 1 "Freq (Hz)" "0 80" 10 "L@-A@- (dB)"
 fi

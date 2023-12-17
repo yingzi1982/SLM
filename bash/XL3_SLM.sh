@@ -1,10 +1,11 @@
 #!/bin/bash
 
-folderName=office
-testName=MyTest1
-dateLabel=2023-11-24
+/Test_Uppsala/MyTest_2023-12-17_SLM_001$
+folderName=Test_Uppsala
+testName=MyTest
+dateLabel=2023-12-17
 sessionNumber=1
-positionNumber=3
+positionNumber=1
 
 sessionNumberFmt=`printf "%03d" $sessionNumber`
 positionNumberFmt=`printf "%02d" $positionNumber`
