@@ -59,7 +59,7 @@ awk 'NR>=5{print $1, $3}' $originalxy | gmt plot -Sb1ub0 -Gorange -W.5p
 awk '{print $1, $2, $3, $4}' LAFmax.txt | gmt plot -N -Sv0.1c+s+e -Gred -W.5p,red
 awk '{print $1, $2, $5, $6}' LAFmax.txt | gmt text -Dj2p/0 -F+fred+j -N
 
-awk '{print $1, $2, $3, $4}' LAF90.txt | gmt plot -N -Sv0.1c+s+e -Gred -W.5p,blue
+awk '{print $1, $2, $3, $4}' LAF90.txt | gmt plot -N -Sv0.1c+s+e -Gblue -W.5p,blue
 awk '{print $1, $2, $5, $6}' LAF90.txt | gmt text -Dj2p/0 -F+fblue+j -N
 
 
