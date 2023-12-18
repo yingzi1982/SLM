@@ -56,8 +56,8 @@ awk 'NR>=5{print $1, $3}' $originalxy | gmt plot -Sb1ub0 -Gorange -W.5p
 #echo 0 $LAFmax | gmt plot  -Ss0.02i -Gred -N -W0p
 #echo 0 $LAF90 | gmt plot  -Ss0.02i -Ggreen -N -W0p
 
-awk '{print $1, $2, $3, $4}' LAF90.txt | gmt plot -N -Sv0.1c+s+e -Gblue -W.5p
-awk '{print $3, $4, $5, $6}' LAF90.txt | gmt text -Dj10p/0 -F+fred+j -N
+awk '{print $1, $2, $3, $4}' LAF90.txt | gmt plot -N -Sv0.1c+s+e -Gblue -W.5p,blue
+awk '{print $1, $2, $5, $6}' LAF90.txt | gmt text -Dj10p/0 -F+fred+j -N
 
 
 #gmt text -Dj10p/0 -F+fred+j -N LAFmax.txt
