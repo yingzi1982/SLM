@@ -45,7 +45,7 @@ cat << EOF >| LAF90.txt
 $arrowStart_x $LAF90 $xmin $LAF90 LM L@-AF90@-
 EOF
 cat << EOF >| LAFmax.txt
-$arrowStart_x $LAFmax $xmin $LAFmax LM L@-AF90@-
+$arrowStart_x $LAFmax $xmin $LAFmax LM L@-AFmax@-
 EOF
 
 gmt begin $fig
