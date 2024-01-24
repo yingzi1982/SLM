@@ -3,7 +3,7 @@ rm -f gmt.conf
 rm -f gmt.history
 #gmt set MAP_FRAME_TYPE plain
 #gmt set MAP_FRAME_PEN thin
-gmt set FONT 12p,Helvetica,black
+gmt set FONT 10p,Helvetica,black
 #--------------------------------------------------------------------
 
 name=${1}
