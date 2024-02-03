@@ -51,7 +51,7 @@ do
 elementName=`echo $nameList | awk -v i="$i" '{print $(i)}'`
 fig=$figFolder$name\_$elementName
 gmt begin $fig
-echo "$xy" | awk -v i="$i" 'NR==1{print $1, $(i+1)}' | gmt plot -J$projection -Bxc$xannots+a-45+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" -BWSne+glightgray -R$region -Sb1ub0 -Gorange -W1p
+echo "$xy" | awk -v i="$i" 'NR==1{print $1, $(i+1)}' | gmt plot -J$projection -Bxc$xannots+a-45+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" -BWSne -R$region -Sb1ub0 -Gorange -W1p
 echo "$xy" | awk -v i="$i" 'NR>=2{print $1, $(i+1)}' | gmt plot -Sb1ub0 -Gyellow -W1p
 
 echo $xmax $ymax RT $elementName | gmt text -Dj2p/2p -F+fblack+j -N -G240/255/240

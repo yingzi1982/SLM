@@ -24,9 +24,10 @@ dos2unix -q $Spectrum_Report_file
 Date=`cat $Spectrum_Report_file | sed -n '/^# Spectrum Results$/,/^$/{//b;p}' | awk 'NR==2||NR==4{print}' | tr '\t' ',' | tr -d '[:blank:]' | csvcut -Sc 'Date'| awk  -F',' 'NR==2{print $1}'`
 Time=`cat $Spectrum_Report_file | sed -n '/^# Spectrum Results$/,/^$/{//b;p}' | awk 'NR==2||NR==4{print}' | tr '\t' ',' | tr -d '[:blank:]' | csvcut -Sc 'Time'| awk  -F',' 'NR==2{print $1}'`
 Duration=`cat $Spectrum_Report_file | sed -n '/^# Spectrum Results$/,/^$/{//b;p}' | awk 'NR==2||NR==4{print}' | tr '\t' ',' | tr -d '[:blank:]' | csvcut -Sc 'Duration'| awk  -F',' 'NR==2{print $1}'`
-Receiver=`cat $Spectrum_Report_file | sed -n '/^# Spectrum Results$/,/^$/{//b;p}' | awk 'NR==2||NR==4{print}' | tr '\t' ',' | tr -d '[:blank:]' | csvcut -Sc 'Comment'| awk  -F',' 'NR==2{print $1}'`
+#Receiver=`cat $Spectrum_Report_file | sed -n '/^# Spectrum Results$/,/^$/{//b;p}' | awk 'NR==2||NR==4{print}' | tr '\t' ',' | tr -d '[:blank:]' | csvcut -Sc 'Comment'| awk  -F',' 'NR==2{print $1}'`
+Receiver=`./read_receiver_label.sh $dataFolder`
 time_label="Date: $Date Time: $Time Duration: $Duration"
-echo $time_label
+echo The SLM data was recorded at $time_label
 
 LAeq_file=$dataFolder/LAeq
 echo \#oneThirdOctave20to20k > $LAeq_file

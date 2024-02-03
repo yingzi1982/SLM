@@ -49,7 +49,7 @@ LAF90=`cat $originalxy | grep LAF90 | cut -d = -f 2 | xargs`
 
 region=$xmin/$xmax/$ymin/$ymax
 
-fig=$figFolder$name\_$xmin-$xmax
+fig=$figFolder$name\_$receiverName\_$xmin-$xmax
 gmt begin $fig
 echo "$xy" | awk 'NR%3==0{print $1,$2}'| gmt plot -J$projection -R$region -Bxa$xInterval\f$xHalfInterval\g$xHalfInterval+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" -Wthin,brown
 echo $xmax $ymax RT $receiverName | gmt text -Dj2p/2p -F+fblack+j -N -G240/255/240
