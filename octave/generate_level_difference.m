@@ -22,8 +22,9 @@ dataFile2 = [dataFolder2 dataName];
 data1 = dlmread(dataFile1,'\t',2,0);
 data2 = dlmread(dataFile2,'\t',2,0);
 
-data1(find(data1<0)) = 0;
-data2(find(data2<0)) = 0
+negativeIndex = find(data1<0|data2<0);
+data1(negativeIndex) = 0;
+data2(negativeIndex) = 0;
 data_diff = data1 - data2;
 
 fid = fopen(dataFile1);

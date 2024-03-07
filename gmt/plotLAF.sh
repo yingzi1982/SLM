@@ -3,8 +3,8 @@ rm -f gmt.conf
 rm -f gmt.history
 #gmt set MAP_FRAME_TYPE plain
 #gmt set MAP_FRAME_PEN thin
-gmt set FONT 10p,Helvetica,black
-gmt set FONT_ANNOT 10p,Helvetica,black
+gmt set FONT 8p,Helvetica,black
+gmt set FONT_ANNOT 8p,Helvetica,black
 #--------------------------------------------------------------------
 
 name=${1}
@@ -41,7 +41,7 @@ yHalfInterval=`echo $yInterval/2 | bc -l`
 receiverName=`cat $originalxy | grep Receiver | cut -d = -f 2 | xargs`
 
 xy=`cat $originalxy | sed -n '/^Timer LAFT3$/,/^$/{//b;p}'`
-LAF90=`cat $originalxy | grep LAF90 | cut -d = -f 2 | xargs`
+LAF90=`cat $originalxy | grep LAF90 | cut -d = -f 2 | awk '{printf "%.0f\n",$1}' | xargs`
 #cat << EOF >| LAF90.txt
 #$xmin $LAF90
 #$xmax $LAF90
