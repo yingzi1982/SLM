@@ -13,11 +13,16 @@ folder=${2}
 width=${3}
 height=${4}
 
-xlabel=${5}
-xrange=${6}
+thickness=${5}
 
-ylabel=${7}
-yrange=${8}
+xlabel=${6}
+xrange=${7}
+
+ylabel=${8}
+yrange=${9}
+
+colorSegmentation=${10}
+colorSegmentation=`echo $colorSegmentation|tr -d ' '` 
 
 dataFolder=$folder
 originalxy=$dataFolder$name
@@ -28,10 +33,16 @@ figFolder=$folder
 
 projection=X$width/$height
 
-xannots=`cat $originalxy | head -n 1 | cut -d "#" -f2`
+xannotsFile=xannots.txt
+header=`cat $originalxy | head -n 1 | cut -d "#" -f2`
+cat $header | awk '{$NF=""}1' > $xannotsFile
 
-xmin=`echo $xrange | awk -F'/' '{print $1-0.5}'`
-xmax=`echo $xrange | awk -F'/' '{print $2+0.5}'`
+color=`cat $header | awk '{print $NF}'`
+
+xy=`paste <(cat $header | awk '{print $1}') <(awk 'NR>2{print}' $originalxy) --delimiters ' '`
+
+xmin=`echo $xrange | awk -F'/' '{print $1}'`
+xmax=`echo $xrange | awk -F'/' '{print $2}'`
 
 ymin=`echo $yrange | awk -F'/' '{print $1}'`
 ymax=`echo $yrange | awk -F'/' '{print $2}'`
@@ -42,23 +53,40 @@ yHalfInterval=`echo $yInterval/2 | bc -l`
 nameList=`cat $originalxy | awk 'NR==2{print}'`
 nameListLength=`echo $nameList | awk '{print NF}'`
 
-xy=`paste <(cat $xannots | awk '{print $1}') <(awk 'NR>2{print}' $originalxy) --delimiters ' '`
-
-region=$xmin/$xmax/$ymin/$ymax
+region=`echo $xmin-0.5 | bc -l`/`echo $xmax+0.5 | bc -l`/$ymin/$ymax
+xmin_region=`echo $region | awk -F'/' '{print $1}'`
+xmax_region=`echo $region | awk -F'/' '{print $2}'`
+ymin_region=`echo $region | awk -F'/' '{print $3}'`
+ymax_region=`echo $region | awk -F'/' '{print $4}'`
 
 for i in $(seq 1 $nameListLength)
 do
 elementName=`echo $nameList | awk -v i="$i" '{print $(i)}'`
 fig=$figFolder$name\_$elementName
 gmt begin $fig
-echo "$xy" | awk -v i="$i" 'NR==1{print $1, $(i+1)}' | gmt plot -J$projection -Bxc$xannots+a-45+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" -BWSne -R$region -Sb1ub0 -Gorange -W1p
-echo "$xy" | awk -v i="$i" 'NR>=2{print $1, $(i+1)}' | gmt plot -Sb1ub0 -Gyellow -W1p
+gmt basemap -J$projection -R$region -Bxc$xannotsFile+a-45+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" -BWSne 
 
-echo $xmax $ymax RT $elementName | gmt text -Dj2p/2p -F+fblack+j -N -G240/255/240
-  
+for j in $(seq $xmin $xmax)
+do
+element_x=`echo "$xy" | awk -v i="$i" -v j="$j" 'NR==j{print $1}'`
+element_y=`echo "$xy" | awk -v i="$i" -v j="$j" 'NR==j{print $(i+1)}'`
+if [ $colorSegmentation = "none" ] ||[ $colorSegmentation = "no" ]; then
+jColor=`echo "$color" | awk -v j="$j" 'NR==j{print $1}' | tr -d ' '`
+else
+jColor=`cat  $colorSegmentation | awk -v element_y="$element_y" '{{if($1<=element_y&&$2>element_y) print $3}}' | tr -d ' '`
+fi
+echo $element_x $element_y | gmt plot -Sb$thickness\ub0 -G$jColor -W1p
+done
 gmt end
+if [ "$elementName" = "NoName" ] ;then
+:
+else
+echo $xmax_region $ymax_region RT $elementName | gmt text -Dj2p/2p -F+fblack+j -N -G240/255/240
+fi
+
 inkscape $fig\.pdf --export-filename=$fig\.emf &>/dev/null
 #pdf2svg  $fig\.pdf $fig\.svg
 done
+rm -f $xannotsFile
 #rm -f gmt.conf
 #rm -f gmt.history
