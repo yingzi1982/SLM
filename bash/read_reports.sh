@@ -24,11 +24,13 @@ LAFT3Total=`cat $Log_file | sed -n '/^# Broadband Log Results$/,/^$/{//b;p}' | t
 data_section=`cat $Report_file | sed -n '/^# Broadband Results$/,/^$/{//b;p}' | tr '\t' ',' | tr -d '[:blank:]'`
 time_segmentation_number=$(expr `echo "$data_section"| wc -l` - 2)
 
-Leq_segmentation_file=$dataFolder/LAeq_segmentation
-echo \#segmentation > $Leq_segmentation_file
-echo $receiver_label >>$Leq_segmentation_file
-echo "$data_section" | csvcut -Sc 'LAeq' | awk 'NR>2{print $1}'>>$Leq_segmentation_file
-header_file=../gmt/segmentation
+LAeqSegmentation_file=$dataFolder/LAeqSegmentation
+echo \#LAeqSegmentation > $LAeqSegmentation_file
+echo $receiver_label >>$LAeqSegmentation_file
+echo "$data_section" | csvcut -Sc 'LAeq' | awk 'NR>2{print $1}'>>$LAeqSegmentation_file
+echo "0" >>$LAeqSegmentation_file
+header_file=../gmt/LAeqSegmentation
+> $header_file
 
 for n in $(seq 1 $time_segmentation_number)
 do
@@ -88,3 +90,5 @@ startTimeInSeconds=`date -f <(echo "$startTime") "+%s"`
 endTimeInSeconds=`date -f <(echo "$endTime") "+%s"`
 paste <(echo "$DateAndTimeTotalInSeconds") <(echo "$LAFT3Total") --delimiters ' '  | awk -v startTimeInSeconds="$startTimeInSeconds" -v endTimeInSeconds="$endTimeInSeconds" '($1>=startTimeInSeconds) && ($1<=endTimeInSeconds){print}' | awk '{if(NR==1){zeroTime=$1}{print ($1-zeroTime)/60,$2}}' | grep -v "\-\.\-" | awk 'NR%3==1{print}'>> $LAFT3_segment_file
 done
+
+echo $(($time_segmentation_number+1)) ag END yellow >> $header_file
