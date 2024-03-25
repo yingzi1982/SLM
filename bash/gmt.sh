@@ -4,7 +4,7 @@ folder=$1
 
 cd ../gmt/
 
-if false; then 
+if true; then 
 ./plotColorbar.sh $folder
 fi
 
@@ -78,7 +78,7 @@ startTimeLabel=`cat $header | awk -v startLineNumbering="$startLineNumbering" 'N
 endTimeLabel=`cat $header | awk -v endLineNumbering="$endLineNumbering" 'NR==endLineNumbering{print $3}'`
 
 xrange=$startLineNumbering/$(($endLineNumbering-1))
-width=7c
+width=10c
 height=4c
 #name=LAeq
 xlabel='Time (h)'

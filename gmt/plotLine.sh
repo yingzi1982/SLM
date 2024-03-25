@@ -81,6 +81,7 @@ else
 echo $xmax $ymax RT $receiverName | gmt text -Dj2p/2p -F+fblack+j -N -G240/255/240
 fi
 
+gmt basemap -BWSne
 gmt end
 inkscape $fig\.pdf --export-filename=$fig\.emf &>/dev/null
 #pdf2svg  $fig\.pdf $fig\.svg

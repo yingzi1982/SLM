@@ -64,7 +64,7 @@ do
 elementName=`echo $nameList | awk -v i="$i" '{print $(i)}'`
 fig=$figFolder$name\_$elementName
 gmt begin $fig
-gmt basemap -J$projection -R$region -Bxc$xannotsFile+a-45+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" -BWSne 
+gmt basemap -J$projection -R$region -Bxc$xannotsFile+a-45+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" 
 
 for j in $(seq $xmin $xmax)
 do
@@ -77,12 +77,13 @@ jColor=`cat  $colorSegmentation | awk -v element_y="$element_y" '{{if($1<=elemen
 fi
 echo $element_x $element_y | gmt plot -Sb$thickness\ub0 -G$jColor -W1p
 done
-gmt end
 if [ "$elementName" = "NoName" ] ;then
 :
 else
 echo $xmax_region $ymax_region RT $elementName | gmt text -Dj2p/2p -F+fblack+j -N -G240/255/240
 fi
+gmt basemap -BWSne
+gmt end
 
 inkscape $fig\.pdf --export-filename=$fig\.emf &>/dev/null
 #pdf2svg  $fig\.pdf $fig\.svg
