@@ -8,7 +8,7 @@ if true; then
 ./plotColorbar.sh $folder
 fi
 
-if true; then 
+if false; then 
 for name in `find $folder -name "LAeq_*"  '!' -name '*.svg' '!' -name '*.emf' '!' -name '*.pdf' -exec basename {} \;`; do
   #echo "plotting LAeq"
   width=7c
@@ -31,7 +31,8 @@ for name in `find $folder -name "LAF_*"  '!' -name '*.svg' '!' -name '*.emf' '!'
   width=7c
   height=4c
   #name=LAF
-  xlabel='Statistical indices'
+  #xlabel='Statistical indices'
+  xlabel='Time percentage(%)'
   xrange=1/9
   ylabel='LAF (dB)'
   yrange=0/80/10
@@ -42,7 +43,7 @@ for name in `find $folder -name "LAF_*"  '!' -name '*.svg' '!' -name '*.emf' '!'
 done
 fi
 
-if true; then
+if false; then
 for name in `find $folder -name "LAFT3_*"  '!' -name '*.svg' '!' -name '*.emf' '!' -name '*.pdf'  -exec basename {} \;`; do
   #echo "plotting LAFT3 time"
   duration_in_minute=60
@@ -62,7 +63,7 @@ for name in `find $folder -name "LAFT3_*"  '!' -name '*.svg' '!' -name '*.emf' '
 done
 fi
 
-if true; then 
+if false; then 
 for name in `find $folder -name "LAeqSegmentation"  '!' -name '*.svg' '!' -name '*.emf' '!' -name '*.pdf'  -exec basename {} \;`; do
  header=`cat $folder$name | head -n 1 | cut -d "#" -f2`
  #delimiter='00|12|END'

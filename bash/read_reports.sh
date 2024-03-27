@@ -15,80 +15,84 @@ dos2unix -q $Report_file
 Spectrum_Report_file=$dataFolder$prefix\_Spectrum_Report.txt
 dos2unix -q $Spectrum_Report_file
 
-DateTotal=`cat $Log_file | sed -n '/^# Broadband Log Results$/,/^$/{//b;p}' | tr '\t' ',' | tr -d '[:blank:]' | csvcut -Sc 'Date' | awk 'NR>2{print $1}'` 
-TimeTotal=`cat $Log_file | sed -n '/^# Broadband Log Results$/,/^$/{//b;p}' | tr '\t' ',' | tr -d '[:blank:]' | csvcut -Sc 'Time' | awk 'NR>2{print $1}'` 
-DateAndTimeTotal=`paste <(echo "$DateTotal") <(echo "$TimeTotal") --delimiters 'T'`
-DateAndTimeTotalInSeconds=`date -f <(echo "$DateAndTimeTotal") "+%s"`
-LAFT3Total=`cat $Log_file | sed -n '/^# Broadband Log Results$/,/^$/{//b;p}' | tr '\t' ',' | tr -d '[:blank:]' | csvcut -Sc 'LAFT3' | awk 'NR>2{print $1}'`
+#---------------------------------------------------------------------------------------
+Log_file_data_section=`cat $Log_file | sed -n '/^# Broadband Log Results$/,/^$/{//b;p}' | tr '\t' ',' | tr -d '[:blank:]'`
+Report_file_data_section=`cat $Report_file | sed -n '/^# Broadband Results$/,/^$/{//b;p}' | tr '\t' ',' | tr -d '[:blank:]'`
+Spectrum_Log_file_data_section=`cat $Spectrum_Report_file | sed -n '/^# Spectrum Results$/,/^$/{//b;p}' | tr '\t' ',' | tr -d '[:blank:]'`
 
-data_section=`cat $Report_file | sed -n '/^# Broadband Results$/,/^$/{//b;p}' | tr '\t' ',' | tr -d '[:blank:]'`
-time_segmentation_number=$(expr `echo "$data_section"| wc -l` - 2)
+DateTotal=`echo "$Log_file_data_section" | csvcut -Sc 'Date' | awk 'NR>2{print}'` 
+TimeTotal=`echo "$Log_file_data_section" | csvcut -Sc 'Time' | awk 'NR>2{print}'` 
+DateAndTimeTotal=`paste <(echo "$DateTotal") <(echo "$TimeTotal") --delimiters 'T'`
+LAFT3Total=`echo "$Log_file_data_section" | csvcut -Sc 'LAFT3' | awk 'NR>2{print}'` 
+
+time_segmentation_number=$(expr `echo "$Report_file_data_section"| wc -l` - 2)
+
+DateSegmentation=`echo "$Report_file_data_section" | csvcut -Sc 'Date' | awk 'NR>2{print}'`
+TimeSegmentation=`echo "$Report_file_data_section" | csvcut -Sc 'Time' | awk 'NR>2{print}'`
+DurationSegmentation=`echo "$Report_file_data_section" | csvcut -Sc 'Duration' | awk 'NR>2{print}' | awk -F'.' '{print $1}'`
+DateAndTimeSegmentation=`paste <(echo "$DateSegmentation") <(echo "$TimeSegmentation") --delimiters 'T'`
+DateAndTimeAndDurationSegmentation=`paste <(echo "$DateAndTimeSegmentation") <(echo "$DurationSegmentation") --delimiters 'D'`
+
+#---------------------------------------------------------------------------------------
+LAeqSegmentation=`echo "$Report_file_data_section" | csvcut -Sc 'LAeq' | awk 'NR>2{print}'`
 
 LAeqSegmentation_file=$dataFolder/LAeqSegmentation
-echo \#LAeqSegmentation > $LAeqSegmentation_file
-echo $receiver_label >>$LAeqSegmentation_file
-echo "$data_section" | csvcut -Sc 'LAeq' | awk 'NR>2{print $1}'>>$LAeqSegmentation_file
-echo "0" >>$LAeqSegmentation_file
-header_file=../gmt/LAeqSegmentation
-> $header_file
+echo $receiver_label > $LAeqSegmentation_file
+paste <(echo "$DateAndTimeAndDurationSegmentation") <(echo "$LAeqSegmentation") --delimiters ' ' >> $LAeqSegmentation_file
+
+#---------------------------------------------------------------------------------------
 
 for n in $(seq 1 $time_segmentation_number)
 do
-ln=$((n+2))
 
-Date=`echo "$data_section" | csvcut -Sc 'Date' | awk -v ln="$ln" 'NR==ln{print $1}'`
-Time=`echo "$data_section" | csvcut -Sc 'Time' | awk -v ln="$ln" 'NR==ln{print $1}'`
-DateAndTime=`paste <(echo "$Date") <(echo "$Time") --delimiters 'T'`
-Duration=`echo "$data_section" | csvcut -Sc 'Duration' | awk -v ln="$ln" 'NR==ln{print $1}'| awk -F'.' '{print $1}'`
+Date=`echo "$DateSegmentation" | awk -v n="$n" 'NR==n{print}'`
+Time=`echo "$TimeSegmentation" | awk -v n="$n" 'NR==n{print}'`
+DateAndTime=`echo "$DateAndTimeSegmentation" | awk -v n="$n" 'NR==n{print}'`
+Duration=`echo "$DurationSegmentation" | awk -v n="$n" 'NR==n{print}'`
 DurationHH=`echo $Duration | awk -F':' '{print $1}'`
 DurationMM=`echo $Duration | awk -F':' '{print $2}'`
 DurationSS=`echo $Duration | awk -F':' '{print $3}'`
 
-startTime=$DateAndTime
-endTime=`date -d "$startTime $DurationHH hours $DurationMM minutes $DurationSS seconds" +"%Y-%m-%dT%H:%M:%S"`
-
 DateLabel=$Date
 TimeLabel=`echo $Time | sed "s/:/-/g"`
 DurationLabel=`echo $Duration | sed "s/:/-/g"`
+
 timeStampLabel=$DateLabel\T$TimeLabel\D$DurationLabel
 
+#----------------------------------------------------------------
+LAFT3_file=$dataFolder/LAFT3\_$timeStampLabel
 
-HH=`echo $TimeLabel | awk -F'-' '{print $1}'`
-MM=`echo $TimeLabel | awk -F'-' '{print $2}'`
-SS=`echo $TimeLabel | awk -F'-' '{print $3}'`
-#echo $n ag $HH:$MM yellow >> $header_file
-echo $n ag $HH yellow >> $header_file
+startTime=$DateAndTime
+endTime=`date -d "$startTime $DurationHH hours $DurationMM minutes $DurationSS seconds" +"%Y-%m-%dT%H:%M:%S"`
 
-LAFmax=`echo "$data_section" | csvcut -Sc 'LAFmax' | awk -v ln="$ln" 'NR==ln{print $1}'`
-LAF1=`echo "$data_section" | csvcut -Sc 'LAF1.0%' | awk -v ln="$ln" 'NR==ln{print $1}'`
-LAF5=`echo "$data_section" | csvcut -Sc 'LAF5.0%' | awk -v ln="$ln" 'NR==ln{print $1}'`
-LAF10=`echo "$data_section" | csvcut -Sc 'LAF10.0%' | awk -v ln="$ln" 'NR==ln{print $1}'`
-LAF50=`echo "$data_section" | csvcut -Sc 'LAF50.0%' | awk -v ln="$ln" 'NR==ln{print $1}'`
-LAF90=`echo "$data_section" | csvcut -Sc 'LAF90.0%' | awk -v ln="$ln" 'NR==ln{print $1}'`
-LAF95=`echo "$data_section" | csvcut -Sc 'LAF95.0%' | awk -v ln="$ln" 'NR==ln{print $1}'`
-LAF99=`echo "$data_section" | csvcut -Sc 'LAF99.0%' | awk -v ln="$ln" 'NR==ln{print $1}'`
-LAFmin=`echo "$data_section" | csvcut -Sc 'LAFmin' | awk -v ln="$ln" 'NR==ln{print $1}'`
+echo $receiver_label > $LAFT3_file
 
+paste <(echo "$DateAndTimeTotal") <(echo "$LAFT3Total") --delimiters ' '  | awk -v startTime="$startTime" -v endTime="$endTime" '($1>=startTime) && ($1<=endTime){print}' | grep -v "\-\.\-" | awk 'NR%3==1{print}'>> $LAFT3_file
+
+#---------------------------------------------------------------------------------------
 LAF_file=$dataFolder/LAF\_$timeStampLabel
+
+LAFmax=`echo "$Report_file_data_section" | csvcut -Sc 'LAFmax' | awk 'NR>2{print}' | awk -v n="$n" 'NR==n{print}'`
+LAF1=`echo "$Report_file_data_section" | csvcut -Sc 'LAF1.0%' | awk 'NR>2{print}' | awk -v n="$n" 'NR==n{print}'`
+LAF5=`echo "$Report_file_data_section" | csvcut -Sc 'LAF5.0%' | awk 'NR>2{print}' | awk -v n="$n" 'NR==n{print}'`
+LAF10=`echo "$Report_file_data_section" | csvcut -Sc 'LAF10.0%' | awk 'NR>2{print}' | awk -v n="$n" 'NR==n{print}'`
+LAF50=`echo "$Report_file_data_section" | csvcut -Sc 'LAF50.0%' | awk 'NR>2{print}' | awk -v n="$n" 'NR==n{print}'`
+LAF90=`echo "$Report_file_data_section" | csvcut -Sc 'LAF90.0%' | awk 'NR>2{print}' | awk -v n="$n" 'NR==n{print}'`
+LAF95=`echo "$Report_file_data_section" | csvcut -Sc 'LAF95.0%' | awk 'NR>2{print}' | awk -v n="$n" 'NR==n{print}'`
+LAF99=`echo "$Report_file_data_section" | csvcut -Sc 'LAF99.0%' | awk 'NR>2{print}' | awk -v n="$n" 'NR==n{print}'`
+LAFmin=`echo "$Report_file_data_section" | csvcut -Sc 'LAFmin' | awk 'NR>2{print}' | awk -v n="$n" 'NR==n{print}'`
+
 echo -en \#LAFIndicators'\n'$receiver_label'\n'$LAFmax'\n'$LAF1'\n'$LAF5'\n'$LAF10'\n'$LAF50'\n'$LAF90'\n'$LAF95'\n'$LAF99'\n'$LAFmin > $LAF_file
 
 #----------------------------------------------------------------
-LAeq=`echo "$data_section" | csvcut -Sc 'LAeq' | awk -v ln="$ln" 'NR==ln{print $1}'`
 LAeq_file=$dataFolder/LAeq\_$timeStampLabel
+
+LAeq=`echo "$Report_file_data_section" | csvcut -Sc 'LAeq' | awk 'NR>2{print}' | awk -v n="$n" 'NR==n{print}'`
 echo \#oneThirdOctave20to20k > $LAeq_file
 echo $receiver_label >> $LAeq_file
 echo "$LAeq" >> $LAeq_file
 
-LAeq_spectrum=`cat $Spectrum_Report_file | sed -n '/^# Spectrum Results$/,/^$/{//b;p}' | awk 'NR>=2{print}' | tr '\t' ',' | tr -d '[:blank:]' | csvcut -c 13-43 | tr "," " " | awk -v ln="$ln" 'NR==ln{ print}'| fmt -1`
+LAeq_spectrum=`echo "$Spectrum_Log_file_data_section" | awk 'NR>3{print}' | csvcut -c 13-43 | tr "," " " | awk -v n="$n" 'NR==n{ print}' | fmt -1` 
 echo "$LAeq_spectrum" >> $LAeq_file
 
-#----------------------------------------------------------------
-LAFT3_segment_file=$dataFolder/LAFT3\_$timeStampLabel
-echo $receiver_label > $LAFT3_segment_file
-
-startTimeInSeconds=`date -f <(echo "$startTime") "+%s"`
-endTimeInSeconds=`date -f <(echo "$endTime") "+%s"`
-paste <(echo "$DateAndTimeTotalInSeconds") <(echo "$LAFT3Total") --delimiters ' '  | awk -v startTimeInSeconds="$startTimeInSeconds" -v endTimeInSeconds="$endTimeInSeconds" '($1>=startTimeInSeconds) && ($1<=endTimeInSeconds){print}' | awk '{if(NR==1){zeroTime=$1}{print ($1-zeroTime)/60,$2}}' | grep -v "\-\.\-" | awk 'NR%3==1{print}'>> $LAFT3_segment_file
 done
-
-echo $(($time_segmentation_number+1)) ag END yellow >> $header_file
