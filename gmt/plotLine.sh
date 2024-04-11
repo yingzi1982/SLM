@@ -5,6 +5,9 @@ rm -f gmt.history
 #gmt set MAP_FRAME_PEN thin
 gmt set FONT 8p,Helvetica,black
 gmt set FONT_ANNOT 8p,Helvetica,black
+#gmt set FORMAT_DATE_MAP "o dd" FORMAT_CLOCK_MAP hh:mm FONT_ANNOT_PRIMARY +9p
+
+gmt set FORMAT_CLOCK_MAP hh:mm
 #--------------------------------------------------------------------
 
 name=${1}
@@ -34,13 +37,13 @@ projection=X$width/$height
 
 xmin=`echo $xrange | awk -F'/' '{print $1}'`
 xmax=`echo $xrange | awk -F'/' '{print $2}'`
-xInterval=`echo $xrange | awk -F'/' '{print $3}'`
-xHalfInterval=`echo $xInterval/2 | bc -l`
+xPrimaryInterval=`echo $xrange | awk -F'/' '{print $3}'`
+xSecondaryInterval=`echo $xrange | awk -F'/' '{print $4}'`
 
 ymin=`echo $yrange | awk -F'/' '{print $1}'`
 ymax=`echo $yrange | awk -F'/' '{print $2}'`
-yInterval=`echo $yrange | awk -F'/' '{print $3}'`
-yHalfInterval=`echo $yInterval/2 | bc -l`
+yPrimaryInterval=`echo $yrange | awk -F'/' '{print $3}'`
+ySecondaryInterval=`echo $yrange | awk -F'/' '{print $4}'`
 
 receiverName=`cat $originalxy | head -n 1 |tr -d ' '`
 
@@ -50,7 +53,7 @@ region=$xmin/$xmax/$ymin/$ymax
 
 fig=$figFolder$name\_$receiverName
 gmt begin $fig
-gmt basemap -J$projection -R$region -Bxa$xInterval\f$xHalfInterval\g$xHalfInterval+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel"
+gmt basemap -J$projection -R$region  -Bxa$xPrimaryInterval\f$xSecondaryInterval\g$xSecondaryInterval+l"$xlabel" -Bya$yPrimaryInterval\f$ySecondaryInterval\g$ySecondaryInterval+l"$ylabel"
 
 if [ $colorSegmentation = "none" ] || [ $colorSegmentation = "no" ]; then
 :

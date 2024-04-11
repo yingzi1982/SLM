@@ -15,9 +15,9 @@ figFolder=$folder
 cptFile=office.cpt
 cat > $cptFile <<END
 0	blue	1	blue	; < 40 Excellent
-1	green	2	green	;40-45 Satisfactory
-2	yellow	3	yellow	;45-55 Fair
-3	red	4	red	; > 55 Terrible
+1	green	2	green	;40-45 Good
+2	yellow	3	yellow	;45-55 Poor
+3	red	4	red	; > 55 Awful
 B	black
 F	white
 END

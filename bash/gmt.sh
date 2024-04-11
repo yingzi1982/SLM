@@ -4,7 +4,7 @@ folder=$1
 
 cd ../gmt/
 
-if true; then 
+if false; then 
 ./plotColorbar.sh $folder
 fi
 
@@ -32,7 +32,7 @@ for name in `find $folder -name "LAF_*"  '!' -name '*.svg' '!' -name '*.emf' '!'
   height=4c
   #name=LAF
   #xlabel='Statistical indices'
-  xlabel='Time percentage(%)'
+  xlabel='Percentile (%)'
   xrange=1/9
   ylabel='LAF (dB)'
   yrange=0/80/10
@@ -46,15 +46,23 @@ fi
 if false; then
 for name in `find $folder -name "LAFT3_*"  '!' -name '*.svg' '!' -name '*.emf' '!' -name '*.pdf'  -exec basename {} \;`; do
   #echo "plotting LAFT3 time"
-  duration_in_minute=60
+  duration=`echo $name | awk -F'_' '{print $2}' | awk -F'T' '{print $2}' | awk -F'D' '{print $2}' | sed "s/-/:/g"`
+  durationHH=`echo $duration | awk -F':' '{print $1}'`
+  durationMM=`echo $duration | awk -F':' '{print $2}'`
+  durationSS=`echo $duration | awk -F':' '{print $3}'`
+
+  date=`echo $name | awk -F'_' '{print $2}' | awk -F'T' '{print $1}'`
+  dateLabel=`date -d "$date" +"%A, %b %d, %Y"`
+  startTime=`echo $name | awk -F'_' '{print $2}' | awk -F'T' '{print $2}' | awk -F'D' '{print $1}' | sed "s/-/:/g"`
+  startDateAndTime=$date\T$startTime
+  endDateAndTime=`date -d "$startDateAndTime $durationHH hours $durationMM minutes $durationSS seconds" +"%Y-%m-%dT%H:%M:%S"`
 
   width=14c
   height=4c
-  #xlabel="Time (m), from $startTime"
-  xlabel="Time (m)"
-  xrange=0/$duration_in_minute/10
+  xlabel="Time (hh:mm), on $dateLabel"
+  xrange=$startDateAndTime/$endDateAndTime/15M/5m
   ylabel='LAFT3 (dB)'
-  yrange=0/80/10
+  yrange=0/80/10/5
   #lineStyle=thin,black
   lineStyle=thin,darkgray
   colorSegmentation=officeNoiseColorSegmentation
@@ -64,34 +72,57 @@ done
 fi
 
 if false; then 
-for name in `find $folder -name "LAeqSegmentation"  '!' -name '*.svg' '!' -name '*.emf' '!' -name '*.pdf'  -exec basename {} \;`; do
- header=`cat $folder$name | head -n 1 | cut -d "#" -f2`
- #delimiter='00|12|END'
- delimiter='00|END'
- delimiterLineNumbering=`cat $header | awk '{print $3}' | egrep -n $delimiter | awk '{print $1}' FS=":"`
+for nameSegmentation in LAeq LAF10 LAF90; do
+fullPartName=$nameSegmentation\Segmentation
 
-elementName=`cat $folder$name | awk 'NR==2{print}'`
+duration=24:00:00
+durationHH=`echo $duration | awk -F':' '{print $1}'`
+durationMM=`echo $duration | awk -F':' '{print $2}'`
+durationSS=`echo $duration | awk -F':' '{print $3}'`
+durationLabel=`echo $duration | sed "s/:/-/g"`
 
-for i in $(seq 1 $((`echo "$delimiterLineNumbering" | wc -l` - 1)));do
-startLineNumbering=`echo "$delimiterLineNumbering" | awk -v i="$i" 'NR==i{print}'`
-endLineNumbering=`echo "$delimiterLineNumbering" | awk -v i="$i" 'NR==(i+1){print}'`
-startTimeLabel=`cat $header | awk -v startLineNumbering="$startLineNumbering" 'NR==startLineNumbering{print $3}'`
-endTimeLabel=`cat $header | awk -v endLineNumbering="$endLineNumbering" 'NR==endLineNumbering{print $3}'`
+elementName=`cat $folder$fullPartName | awk 'NR==1{print}'`
 
-xrange=$startLineNumbering/$(($endLineNumbering-1))
+date=`cat $folder$fullPartName | awk -F'T' 'NR==2{print $1}'`
+dateLabel=`date -d "$date" +"%A, %b %d, %Y"`
+
+for startTime in 00:00:00; do
+
+startDateAndTime=$date\T$startTime
+endDateAndTime=`date -d "$startDateAndTime $durationHH hours $durationMM minutes $durationSS seconds" +"%Y-%m-%dT%H:%M:%S"`
+
+startDateAndTimeLabel=`echo $startDateAndTime | sed "s/:/-/g"`
+
+cutPart=`cat $folder$fullPartName  | awk -v startDateAndTime="$startDateAndTime" -v endDateAndTime="$endDateAndTime" '($1>=startDateAndTime) && ($1<endDateAndTime) && (NR>1){print}'`
+
+cutLength=`echo "$cutPart" | wc -l`
+
+timeLabel=`echo "$cutPart" | awk '{print $1}' | awk -F'T' '{print $2}' | awk -F':' '{print $1}'`
+
+header_file=$fullPartName
+>$header_file
+for n in $(seq 1 $cutLength);do
+echo $n ag `echo "$timeLabel" | awk -v n="$n" 'NR==n{print}'` yellow >> $header_file
+done
+
+cutPartName=$fullPartName\_$startDateAndTimeLabel\D$durationLabel
+cutPart_file=$folder$cutPartName
+echo $header_file > $cutPart_file
+echo $elementName >> $cutPart_file 
+echo "$cutPart" | awk '{print $2}' >> $cutPart_file
+
+xrange=1/$cutLength
 width=10c
 height=4c
-#name=LAeq
-xlabel='Time (h)'
-ylabel='LAeq (dB)'
+name=$cutPartName
+xlabel="Time (hh), on $dateLabel"
+ylabel="$nameSegmentation (dB)"
 yrange=0/60/10
 thickness=1
 colorSegmentation=officeNoiseColorSegmentation
 #colorSegmentation=no
 ./plotBar.sh $name $folder $width $height $thickness "$xlabel" $xrange "$ylabel" $yrange $colorSegmentation
 
-mv $folder$name\_$elementName.emf $folder$name\_$elementName\_$startTimeLabel-$endTimeLabel.emf
-mv $folder$name\_$elementName.pdf $folder$name\_$elementName\_$startTimeLabel-$endTimeLabel.pdf
 done
 done
 fi

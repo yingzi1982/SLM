@@ -15,10 +15,10 @@ dos2unix -q $Report_file
 Spectrum_Report_file=$dataFolder$prefix\_Spectrum_Report.txt
 dos2unix -q $Spectrum_Report_file
 
-#---------------------------------------------------------------------------------------
 Log_file_data_section=`cat $Log_file | sed -n '/^# Broadband Log Results$/,/^$/{//b;p}' | tr '\t' ',' | tr -d '[:blank:]'`
 Report_file_data_section=`cat $Report_file | sed -n '/^# Broadband Results$/,/^$/{//b;p}' | tr '\t' ',' | tr -d '[:blank:]'`
 Spectrum_Log_file_data_section=`cat $Spectrum_Report_file | sed -n '/^# Spectrum Results$/,/^$/{//b;p}' | tr '\t' ',' | tr -d '[:blank:]'`
+#---------------------------------------------------------------------------------------
 
 DateTotal=`echo "$Log_file_data_section" | csvcut -Sc 'Date' | awk 'NR>2{print}'` 
 TimeTotal=`echo "$Log_file_data_section" | csvcut -Sc 'Time' | awk 'NR>2{print}'` 
@@ -29,16 +29,23 @@ time_segmentation_number=$(expr `echo "$Report_file_data_section"| wc -l` - 2)
 
 DateSegmentation=`echo "$Report_file_data_section" | csvcut -Sc 'Date' | awk 'NR>2{print}'`
 TimeSegmentation=`echo "$Report_file_data_section" | csvcut -Sc 'Time' | awk 'NR>2{print}'`
-DurationSegmentation=`echo "$Report_file_data_section" | csvcut -Sc 'Duration' | awk 'NR>2{print}' | awk -F'.' '{print $1}'`
+DurationSegmentation=`echo "$Report_file_data_section" | csvcut -Sc 'Duration' | awk 'NR>2{print}'`
 DateAndTimeSegmentation=`paste <(echo "$DateSegmentation") <(echo "$TimeSegmentation") --delimiters 'T'`
-DateAndTimeAndDurationSegmentation=`paste <(echo "$DateAndTimeSegmentation") <(echo "$DurationSegmentation") --delimiters 'D'`
 
 #---------------------------------------------------------------------------------------
-LAeqSegmentation=`echo "$Report_file_data_section" | csvcut -Sc 'LAeq' | awk 'NR>2{print}'`
 
-LAeqSegmentation_file=$dataFolder/LAeqSegmentation
-echo $receiver_label > $LAeqSegmentation_file
-paste <(echo "$DateAndTimeAndDurationSegmentation") <(echo "$LAeqSegmentation") --delimiters ' ' >> $LAeqSegmentation_file
+#for nameSegmentation in LAeq; do
+for nameSegmentation in LAeq  "LAF10.0%" "LAF90.0%"; do
+segmentation=`echo "$Report_file_data_section" | csvcut -Sc "$nameSegmentation" | awk 'NR>2{print}'`
+#newNameSegmentation=`echo $nameSegmentation | awk -F'.' '{print $1}'`
+newNameSegmentation=`echo $nameSegmentation | sed "s/\"/s/g"`
+newNameSegmentation=`echo $nameSegmentation | sed "s/\'/m/g"`
+newNameSegmentation=`echo $nameSegmentation | sed "s/.0%//g"`
+
+segmentation_file=$dataFolder/$newNameSegmentation\Segmentation
+echo $receiver_label > $segmentation_file
+paste <(echo "$DateAndTimeSegmentation") <(echo "$segmentation") --delimiters ' ' >> $segmentation_file
+done
 
 #---------------------------------------------------------------------------------------
 
@@ -48,7 +55,8 @@ do
 Date=`echo "$DateSegmentation" | awk -v n="$n" 'NR==n{print}'`
 Time=`echo "$TimeSegmentation" | awk -v n="$n" 'NR==n{print}'`
 DateAndTime=`echo "$DateAndTimeSegmentation" | awk -v n="$n" 'NR==n{print}'`
-Duration=`echo "$DurationSegmentation" | awk -v n="$n" 'NR==n{print}'`
+#Duration=`echo "$DurationSegmentation" | awk -v n="$n" 'NR==n{print}'`
+Duration=01:00:00 #uniform duration
 DurationHH=`echo $Duration | awk -F':' '{print $1}'`
 DurationMM=`echo $Duration | awk -F':' '{print $2}'`
 DurationSS=`echo $Duration | awk -F':' '{print $3}'`
@@ -67,7 +75,7 @@ endTime=`date -d "$startTime $DurationHH hours $DurationMM minutes $DurationSS s
 
 echo $receiver_label > $LAFT3_file
 
-paste <(echo "$DateAndTimeTotal") <(echo "$LAFT3Total") --delimiters ' '  | awk -v startTime="$startTime" -v endTime="$endTime" '($1>=startTime) && ($1<=endTime){print}' | grep -v "\-\.\-" | awk 'NR%3==1{print}'>> $LAFT3_file
+paste <(echo "$DateAndTimeTotal") <(echo "$LAFT3Total") --delimiters ' '  | awk -v startTime="$startTime" -v endTime="$endTime" '($1>=startTime) && ($1<endTime){print}' | grep -v "\-\.\-" | awk 'NR%3==1{print}'>> $LAFT3_file
 
 #---------------------------------------------------------------------------------------
 LAF_file=$dataFolder/LAF\_$timeStampLabel
