@@ -4,11 +4,7 @@ folder=$1
 
 cd ../gmt/
 
-if false; then 
-./plotColorbar.sh $folder
-fi
-
-if false; then 
+if true; then 
 for name in `find $folder -name "LAeq_*"  '!' -name '*.svg' '!' -name '*.emf' '!' -name '*.pdf' -exec basename {} \;`; do
   #echo "plotting LAeq"
   width=7c
@@ -32,10 +28,10 @@ for name in `find $folder -name "LAF_*"  '!' -name '*.svg' '!' -name '*.emf' '!'
   height=4c
   #name=LAF
   #xlabel='Statistical indices'
-  xlabel='Percentile (%)'
+  xlabel='Percentile'
   xrange=1/9
-  ylabel='LAF (dB)'
-  yrange=0/80/10
+  ylabel='LAFx (dB)'
+  yrange=0/75/10
   thickness=0.5
   colorSegmentation=officeNoiseColorSegmentation
   #colorSegmentation=no
@@ -43,7 +39,7 @@ for name in `find $folder -name "LAF_*"  '!' -name '*.svg' '!' -name '*.emf' '!'
 done
 fi
 
-if false; then
+if true; then
 for name in `find $folder -name "LAFT3_*"  '!' -name '*.svg' '!' -name '*.emf' '!' -name '*.pdf'  -exec basename {} \;`; do
   #echo "plotting LAFT3 time"
   duration=`echo $name | awk -F'_' '{print $2}' | awk -F'T' '{print $2}' | awk -F'D' '{print $2}' | sed "s/-/:/g"`
@@ -62,7 +58,7 @@ for name in `find $folder -name "LAFT3_*"  '!' -name '*.svg' '!' -name '*.emf' '
   xlabel="Time (hh:mm), on $dateLabel"
   xrange=$startDateAndTime/$endDateAndTime/15M/5m
   ylabel='LAFT3 (dB)'
-  yrange=0/80/10/5
+  yrange=0/75/10/5
   #lineStyle=thin,black
   lineStyle=thin,darkgray
   colorSegmentation=officeNoiseColorSegmentation
@@ -71,7 +67,7 @@ for name in `find $folder -name "LAFT3_*"  '!' -name '*.svg' '!' -name '*.emf' '
 done
 fi
 
-if false; then 
+if true; then 
 for nameSegmentation in LAeq LAF10 LAF90; do
 fullPartName=$nameSegmentation\Segmentation
 

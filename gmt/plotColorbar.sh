@@ -14,10 +14,10 @@ figFolder=$folder
 
 cptFile=office.cpt
 cat > $cptFile <<END
-0	blue	1	blue	; < 40 Excellent
-1	green	2	green	;40-45 Good
-2	yellow	3	yellow	;45-55 Poor
-3	red	4	red	; > 55 Awful
+0	blue	1	blue	; 35 I
+1	green	2	green	; 40 II
+2	yellow	3	yellow	; 55 III
+3	red	4	red	; 75 IV
 B	black
 F	white
 END
@@ -25,7 +25,7 @@ END
 fig=$figFolder\officeNoiseLevelColorbar
 
 gmt begin $fig
-gmt colorbar -C$cptFile  -Dx20/13+w04/0.5+jML+ef -L0.1 -By+L"Noise level (dBA)"
+gmt colorbar -C$cptFile  -Dx20/13+w04/0.5+jML+ef -L0.1 -By+L"Noise exposure level (dBA)"
 gmt end
 rm -f $cptFile
 
