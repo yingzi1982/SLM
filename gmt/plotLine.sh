@@ -3,8 +3,8 @@ rm -f gmt.conf
 rm -f gmt.history
 #gmt set MAP_FRAME_TYPE plain
 #gmt set MAP_FRAME_PEN thin
-gmt set FONT 8p,Helvetica,black
-gmt set FONT_ANNOT 8p,Helvetica,black
+gmt set FONT 11p,Helvetica,black
+gmt set FONT_ANNOT 11p,Helvetica,black
 #gmt set FORMAT_DATE_MAP "o dd" FORMAT_CLOCK_MAP hh:mm FONT_ANNOT_PRIMARY +9p
 
 gmt set FORMAT_CLOCK_MAP hh:mm
@@ -23,8 +23,8 @@ ylabel=${7}
 yrange=${8}
 
 lineStyle=${9}
-colorSegmentation=${10}
-colorSegmentation=`echo $colorSegmentation|tr -d ' '` 
+cpt=${10}
+cpt=`echo $cpt|tr -d ' '` 
 
 dataFolder=$folder
 originalxy=$dataFolder$name
@@ -55,15 +55,15 @@ fig=$figFolder$name\_$receiverName
 gmt begin $fig
 gmt basemap -J$projection -R$region  -Bxa$xPrimaryInterval\f$xSecondaryInterval\g$xSecondaryInterval+l"$xlabel" -Bya$yPrimaryInterval\f$ySecondaryInterval\g$ySecondaryInterval+l"$ylabel"
 
-if [ $colorSegmentation = "none" ] || [ $colorSegmentation = "no" ]; then
+if [ -z "${10}" ]; then
 :
 else
 xmin_polygon=$xmin
 xmax_polygon=$xmax
 while read line; do
 ymin_polygon=`echo $line | awk '{print $1}'` 
-ymax_polygon=`echo $line | awk '{print $2}'` 
-color=`echo $line | awk '{print $3}'` 
+ymax_polygon=`echo $line | awk '{print $3}'` 
+color=`echo $line | awk '{print $2}'` 
 
 cat <<- EOF > polygonFile
 $xmin_polygon $ymin_polygon
@@ -73,7 +73,7 @@ $xmin_polygon $ymax_polygon
 EOF
 gmt plot polygonFile -G$color
 rm -f polygonFile
-done <$colorSegmentation
+done <$cpt
 fi
 
 echo "$xy" | gmt plot -W$lineStyle
@@ -86,7 +86,8 @@ fi
 
 gmt basemap -BWSne
 gmt end
-inkscape $fig\.pdf --export-filename=$fig\.emf &>/dev/null
-#pdf2svg  $fig\.pdf $fig\.svg
+pdf2svg  $fig\.pdf $fig\.svg
+inkscape $fig\.svg --export-filename=$fig\.emf &>/dev/null
+rm -f $fig\.svg
 #rm -f gmt.conf
 #rm -f gmt.history

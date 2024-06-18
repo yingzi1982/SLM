@@ -13,7 +13,7 @@ for j=1:length(dataNameList)
 data_mean=[];
 for i=1:length(dataFolderList)
 data = dlmread([dataFolderList{i} dataNameList{j}]);
-data_mean=[data_mean;spl_mean(data)];
+data_mean=[data_mean;log_mean(data)];
 end
 fileToWrite=["../data/office/" dataNameList{j} ''];
 fileID = fopen(fileToWrite,'w');

@@ -22,8 +22,7 @@ for name in LAF10 LAF90 LAeq; do
   #fi
   yrange=0/60/10
   thickness=0.5
-  colorSegmentation=officeNoiseColorSegmentation
-  #colorSegmentation=no
-  ./plotBar.sh $name $folder $width $height $thickness "$xlabel" $xrange "$ylabel" $yrange $colorSegmentation
+  cpt=officeNoiseColorSegmentation
+  ./plotBar.sh $name $folder $width $height $thickness "$xlabel" $xrange "$ylabel" $yrange $cpt
 done
 fi

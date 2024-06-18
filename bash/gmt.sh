@@ -11,13 +11,12 @@ for name in `find $folder -name "LAeq_*"  '!' -name '*.svg' '!' -name '*.emf' '!
   height=4c
   #name=LAeq
   xlabel='Frequency (Hz)'
-  xrange=1/32
+  xrange=0/31
   ylabel='LAeq (dB)'
   yrange=0/60/10
   thickness=1
-  colorSegmentation=officeNoiseColorSegmentation
-  #colorSegmentation=no
-  ./plotBar.sh $name $folder $width $height $thickness "$xlabel" $xrange "$ylabel" $yrange $colorSegmentation
+  cpt=officeNoiseColorSegmentation
+  ./plotBar.sh $name $folder $width $height $thickness "$xlabel" $xrange "$ylabel" $yrange $cpt
 done
 fi
 
@@ -33,9 +32,8 @@ for name in `find $folder -name "LAF_*"  '!' -name '*.svg' '!' -name '*.emf' '!'
   ylabel='LAFx (dB)'
   yrange=0/75/10
   thickness=0.5
-  colorSegmentation=officeNoiseColorSegmentation
-  #colorSegmentation=no
-  ./plotBar.sh $name $folder $width $height $thickness "$xlabel" $xrange "$ylabel" $yrange $colorSegmentation
+  cpt=officeNoiseColorSegmentation
+  ./plotBar.sh $name $folder $width $height $thickness "$xlabel" $xrange "$ylabel" $yrange $cpt
 done
 fi
 
@@ -61,9 +59,8 @@ for name in `find $folder -name "LAFT3_*"  '!' -name '*.svg' '!' -name '*.emf' '
   yrange=0/75/10/5
   #lineStyle=thin,black
   lineStyle=thin,darkgray
-  colorSegmentation=officeNoiseColorSegmentation
-  #colorSegmentation=no
-  ./plotLine.sh $name $folder $width $height "$xlabel" $xrange "$ylabel" $yrange $lineStyle $colorSegmentation
+  cpt=officeNoiseColorSegmentation
+  ./plotLine.sh $name $folder $width $height "$xlabel" $xrange "$ylabel" $yrange $lineStyle $cpt
 done
 fi
 
@@ -115,9 +112,8 @@ xlabel="Time (hh), on $dateLabel"
 ylabel="$nameSegmentation (dB)"
 yrange=0/60/10
 thickness=1
-colorSegmentation=officeNoiseColorSegmentation
-#colorSegmentation=no
-./plotBar.sh $name $folder $width $height $thickness "$xlabel" $xrange "$ylabel" $yrange $colorSegmentation
+cpt=officeNoiseColorSegmentation
+./plotBar.sh $name $folder $width $height $thickness "$xlabel" $xrange "$ylabel" $yrange $cpt
 
 done
 done

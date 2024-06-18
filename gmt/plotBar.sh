@@ -3,8 +3,8 @@ rm -f gmt.conf
 rm -f gmt.history
 #gmt set MAP_FRAME_TYPE plain
 #gmt set MAP_FRAME_PEN thin
-gmt set FONT 8p,Helvetica,black
-gmt set FONT_ANNOT 8p,Helvetica,black
+gmt set FONT 11p,Helvetica,black
+gmt set FONT_ANNOT 11p,Helvetica,black
 #--------------------------------------------------------------------
 
 name=${1}
@@ -21,8 +21,7 @@ xrange=${7}
 ylabel=${8}
 yrange=${9}
 
-colorSegmentation=${10}
-colorSegmentation=`echo $colorSegmentation|tr -d ' '` 
+cpt=${10}
 
 dataFolder=$folder
 originalxy=$dataFolder$name
@@ -43,6 +42,7 @@ xy=`paste <(cat $header | awk '{print $1}') <(awk 'NR>2{print}' $originalxy) --d
 
 xmin=`echo $xrange | awk -F'/' '{print $1}'`
 xmax=`echo $xrange | awk -F'/' '{print $2}'`
+xNumber=$(($xmax - $xmin + 1))
 
 ymin=`echo $yrange | awk -F'/' '{print $1}'`
 ymax=`echo $yrange | awk -F'/' '{print $2}'`
@@ -66,28 +66,30 @@ fig=$figFolder$name\_$elementName
 gmt begin $fig
 gmt basemap -J$projection -R$region -Bxc$xannotsFile+a-45+l"$xlabel" -Bya$yInterval\f$yHalfInterval\g$yHalfInterval+l"$ylabel" 
 
-for j in $(seq $xmin $xmax)
+element=`echo "$xy" | awk -v i="$i" '{print $1,$(i+1)}'`
+
+if [ -z "${10}" ]; then
+for j in $(seq 1 $xNumber)
 do
-element_x=`echo "$xy" | awk -v i="$i" -v j="$j" 'NR==j{print $1}'`
-element_y=`echo "$xy" | awk -v i="$i" -v j="$j" 'NR==j{print $(i+1)}'`
-if [ $colorSegmentation = "none" ] ||[ $colorSegmentation = "no" ]; then
-jColor=`echo "$color" | awk -v j="$j" 'NR==j{print $1}' | tr -d ' '`
-else
-jColor=`cat  $colorSegmentation | awk -v element_y="$element_y" '{{if($1<=element_y&&$2>element_y) print $3}}' | tr -d ' '`
-fi
-echo $element_x $element_y | gmt plot -Sb$thickness\ub0 -G$jColor -W1p
+jColor=`echo "$color" | awk -v j="$j" 'NR==j{print}' | tr -d ' '`
+echo "$element" | awk -v j="$j" 'NR==j{print}' | gmt plot -Sb$thickness\ub0 -G$jColor -W1p
 done
+else
+echo "$element" | awk '{print $1,$2,$2}'| gmt plot -Sb$thickness\ub0 -C$cpt -W1p
+fi
+
 if [ "$elementName" = "NoName" ] ;then
 :
 else
-echo $xmax_region $ymax_region RT $elementName | gmt text -Dj2p/2p -F+fblack+j -N -G240/255/240
+echo $xmax_region $ymax_region RT $elementName | gmt text -Dj2p/2p -F+fblack+j -N -Gwhite #-G240/255/240
 fi
 gmt basemap -BWSne
 gmt end
 
-inkscape $fig\.pdf --export-filename=$fig\.emf &>/dev/null
-#pdf2svg  $fig\.pdf $fig\.svg
+pdf2svg  $fig\.pdf $fig\.svg
+inkscape $fig\.svg --export-filename=$fig\.emf &>/dev/null
+rm -f $fig\.svg
 done
 rm -f $xannotsFile
-#rm -f gmt.conf
-#rm -f gmt.history
+rm -f gmt.conf
+rm -f gmt.history
